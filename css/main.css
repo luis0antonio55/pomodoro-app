@@ -274,23 +274,89 @@ select {
     grid-column: auto;
   }
 }
-@media (max-width: 420px) {
+@media (max-width: 640px) {
+  .app-header h1 {
+    font-size: clamp(1.2rem, 4.5vw, 1.7rem);
+  }
+  .top-nav a {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+  .section-heading {
+    flex-direction: column;
+  }
+  .section-heading h2 {
+    font-size: 1.15rem;
+  }
+  .category-form {
+    grid-template-columns: 1fr 80px auto;
+  }
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 480px) {
   .app-shell {
-    width: min(100% - 18px, 1180px);
-    padding-top: 14px;
+    padding: 0 0 30px;
+  }
+  .app-header {
+    padding: 10px 10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-bottom: 14px;
+    gap: 14px;
+  }
+  .app-header h1 {
+    font-size: clamp(1rem, 4vw, 1.3rem);
+  }
+  .top-nav {
+    gap: 6px;
+  }
+  .top-nav a {
+    padding: 7px 10px;
+    font-size: 0.75rem;
   }
   .panel {
-    padding: 16px;
-    border-radius: 20px;
+    padding: 14px;
+    border-radius: 18px;
   }
-  .timer-actions {
+  main {
+    gap: 12px;
+  }
+  .category-form {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
   .category-item {
     grid-template-columns: auto 1fr;
+    gap: 8px;
+    padding: 10px;
   }
-  .category-item button,
-  .category-item input[type="color"] {
-    grid-column: 2;
+  .category-item button {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+  .history-item {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .settings-actions {
+    flex-direction: column;
+  }
+  .settings-actions button {
+    width: 100%;
+  }
+}
+@media (max-width: 380px) {
+  .app-shell {
+    width: min(100% - 10px, 1180px);
+  }
+  .panel {
+    padding: 12px;
+    border-radius: 14px;
+  }
+  .top-nav a {
+    padding: 6px 8px;
+    font-size: 0.7rem;
   }
 }

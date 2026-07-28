@@ -126,8 +126,45 @@
   }
 }
 @media (max-width: 560px) {
+  .timer-panel {
+    min-height: auto;
+  }
   .mode-tabs,
   .timer-actions {
     grid-template-columns: 1fr;
+  }
+  .timer-card {
+    padding: 20px 0;
+  }
+  .progress-ring {
+    width: min(280px, 72vw);
+  }
+  .progress-ring::after {
+    inset: 14px;
+  }
+  .timer-value {
+    font-size: clamp(2.4rem, 10vw, 3.8rem);
+  }
+  .timer-label {
+    margin-top: 68px;
+    font-size: 0.85rem;
+  }
+}
+@media (max-width: 380px) {
+  .timer-card {
+    padding: 14px 0;
+  }
+  .progress-ring {
+    width: min(220px, 68vw);
+  }
+  .progress-ring::after {
+    inset: 10px;
+  }
+  .timer-value {
+    font-size: clamp(1.8rem, 9vw, 2.4rem);
+  }
+  .timer-label {
+    margin-top: 50px;
+    font-size: 0.75rem;
   }
 }
