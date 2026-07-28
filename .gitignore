@@ -21,3 +21,7 @@ Thumbs.db
 .env.local
 
 .vercel
+
+# SyntaxShot
+.syntaxshotrc.json
+syntaxhots/
