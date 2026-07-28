@@ -12,6 +12,7 @@ import { StatsView } from "./views/StatsView.js";
 import { TimerController } from "./controllers/TimerController.js";
 import { TaskController } from "./controllers/TaskController.js";
 import { StatsController } from "./controllers/StatsController.js";
+import { seedDemoData } from "./seed.js";
 
 const loadChart = async () => {
   if (window.Chart) return;
@@ -33,6 +34,8 @@ const timerView = new TimerView();
 const statsView = new StatsView();
 const statsModule = new StatsModule(sessionModel, taskModel);
 const reportModule = new ReportModule(statsModule);
+
+seedDemoData(sessionModel, taskModel);
 const statsController = new StatsController(
   statsModule,
   statsView,
