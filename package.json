@@ -6,6 +6,7 @@
   "scripts": {
     "start": "vite --host 0.0.0.0",
     "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --env=jsdom",
     "test:watch": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --watch --env=jsdom"
   },
