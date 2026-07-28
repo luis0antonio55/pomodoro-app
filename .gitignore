@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.vite/
+
+# Repomix output
+repomix-output.xml
+repomix-output.txt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Env
+.env
+.env.local

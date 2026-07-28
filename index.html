@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pomodoro Productividad</title>
+  <link rel="stylesheet" href="./css/main.css" />
+  <link rel="stylesheet" href="./css/timer.css" />
+  <link rel="stylesheet" href="./css/stats.css" />
+</head>
+
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Aplicación Web</p>
+        <h1>Pomodoro con Análisis de Productividad</h1>
+      </div>
+      <nav class="top-nav" aria-label="Navegación principal">
+        <a href="#timer">Temporizador</a>
+        <a href="#history">Historial</a>
+        <a href="#stats">Estadísticas</a>
+        <a href="#report">Reporte</a>
+        <a href="#settings">Configuración</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="timer" class="panel timer-panel" aria-labelledby="timer-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Sesión activa</p>
+            <h2 id="timer-title">Temporizador</h2>
+          </div>
+          <span id="stateBadge" class="state-badge idle">Inactivo</span>
+        </div>
+
+        <div class="mode-tabs" role="tablist" aria-label="Tipo de intervalo">
+          <button class="mode-tab active" data-mode="work">Trabajo</button>
+          <button class="mode-tab" data-mode="short">Descanso corto</button>
+          <button class="mode-tab" data-mode="long">Descanso largo</button>
+        </div>
+
+        <div id="timerCard" class="timer-card" aria-live="polite">
+          <div class="progress-ring" id="progressRing">
+            <div class="timer-value" id="timerValue">25:00</div>
+            <div class="timer-label" id="timerLabel">Listo para iniciar</div>
+          </div>
+        </div>
+
+        <div class="form-grid compact-grid">
+          <label>
+            Categoría activa
+            <select id="activeCategorySelect"></select>
+          </label>
+        </div>
+
+        <div class="timer-actions">
+          <button id="startBtn" class="primary-btn">Iniciar</button>
+          <button id="pauseBtn" class="secondary-btn" disabled>Pausar</button>
+          <button id="resetBtn" class="ghost-btn">Reiniciar</button>
+          <button id="cancelBtn" class="danger-btn" disabled>Cancelar</button>
+        </div>
+
+        <div id="pauseNotice" class="pause-notice" hidden>
+          ⏸ Temporizador pausado. El conteo está detenido hasta que presiones “Reanudar”.
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="task-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Tareas</p>
+            <h2 id="task-title">Categorías</h2>
+          </div>
+        </div>
+        <form id="categoryForm" class="category-form">
+          <label>
+            Nombre
+            <input id="categoryName" type="text" maxlength="30" placeholder="Ej. Estudio" required />
+          </label>
+          <label>
+            Color
+            <input id="categoryColor" type="color" value="#3b82f6" />
+          </label>
+          <button class="primary-btn" type="submit">Agregar</button>
+        </form>
+        <div id="categoryList" class="category-list"></div>
+      </section>
+
+      <section id="history" class="panel" aria-labelledby="history-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Registro automático</p>
+            <h2 id="history-title">Historial de sesiones</h2>
+          </div>
+          <button id="demoDataBtn" class="ghost-btn" type="button">Cargar datos demo</button>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </section>
+
+      <section id="stats" class="panel wide" aria-labelledby="stats-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Dashboard</p>
+            <h2 id="stats-title">Estadísticas</h2>
+          </div>
+        </div>
+        <div class="kpi-grid">
+          <article class="kpi-card"><span>Total Pomodoros</span><strong id="totalSessions">0</strong></article>
+          <article class="kpi-card"><span>Tiempo productivo</span><strong id="totalTime">0 h</strong></article>
+          <article class="kpi-card"><span>Mejor día</span><strong id="bestDay">-</strong></article>
+          <article class="kpi-card"><span>Franja más productiva</span><strong id="bestHour">-</strong></article>
+        </div>
+        <div id="emptyStats" class="empty-state">Aún no hay sesiones completadas. Inicia un Pomodoro para generar
+          estadísticas.</div>
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3>Pomodoros por día</h3><canvas id="dailyChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Distribución por categoría</h3><canvas id="categoryChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Franjas horarias productivas</h3><canvas id="hourChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Mapa de calor mensual</h3>
+            <div id="heatmap" class="heatmap"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="report" class="panel wide" aria-labelledby="report-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Retroalimentación</p>
+            <h2 id="report-title">Reporte semanal</h2>
+          </div>
+        </div>
+        <div id="weeklyReport" class="report-grid"></div>
+      </section>
+
+      <section id="settings" class="panel wide" aria-labelledby="settings-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Preferencias</p>
+            <h2 id="settings-title">Configuración</h2>
+          </div>
+        </div>
+        <form id="settingsForm" class="settings-grid">
+          <label>Trabajo: <strong><span id="workDurationLabel">25</span> min</strong><input id="workDuration"
+              type="range" min="1" max="60" value="25" /></label>
+          <label>Descanso corto: <strong><span id="shortBreakLabel">5</span> min</strong><input id="shortBreak"
+              type="range" min="1" max="60" value="5" /></label>
+          <label>Descanso largo: <strong><span id="longBreakLabel">15</span> min</strong><input id="longBreak"
+              type="range" min="1" max="60" value="15" /></label>
+          <label class="switch-row"><input id="soundEnabled" type="checkbox" checked /> Notificaciones sonoras</label>
+          <label class="switch-row"><input id="autoStart" type="checkbox" /> Iniciar automáticamente el siguiente
+            intervalo</label>
+          <div class="settings-actions">
+            <button class="primary-btn" type="submit">Guardar configuración</button>
+            <button id="clearDataBtn" class="danger-btn" type="button">Reiniciar datos</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="./js/app.js"></script>
+</body>
+
+</html>
