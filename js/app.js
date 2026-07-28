@@ -12,7 +12,7 @@ import { StatsView } from "./views/StatsView.js";
 import { TimerController } from "./controllers/TimerController.js";
 import { TaskController } from "./controllers/TaskController.js";
 import { StatsController } from "./controllers/StatsController.js";
-import { seedDemoData } from "./seed.js";
+
 
 const loadChart = async () => {
   if (window.Chart) return;
@@ -34,8 +34,6 @@ const timerView = new TimerView();
 const statsView = new StatsView();
 const statsModule = new StatsModule(sessionModel, taskModel);
 const reportModule = new ReportModule(statsModule);
-
-seedDemoData(sessionModel, taskModel);
 const statsController = new StatsController(
   statsModule,
   statsView,
@@ -89,15 +87,35 @@ function bindSettings() {
       timerView.render(timerModel.getState());
       showToast("Configuración guardada.");
     });
-  document.querySelector("#clearDataBtn").addEventListener("click", () => {
-    if (
-      !confirm(
-        "¿Seguro que quieres borrar historial, categorías y configuración?",
-      )
-    )
-      return;
+  document.querySelector("#clearDataBtn").addEventListener("click", async () => {
+    const ok = await showConfirmModal(
+      "Se eliminarán todas las sesiones, categorías y configuración. Esta acción no se puede deshacer.",
+    );
+    if (!ok) return;
     storage.clearPomodoroData();
     location.reload();
+  });
+}
+
+function bindClearHistory() {
+  const btn = document.querySelector("#clearHistoryBtn");
+  if (!btn) return;
+  btn.addEventListener("click", async () => {
+    const history = sessionModel.getHistory();
+    if (!history.length) {
+      showToast("No hay datos que eliminar.");
+      return;
+    }
+    const ok = await showConfirmModal(
+      `Se eliminarán ${history.length} sesión${history.length !== 1 ? "es" : ""} guardada${history.length !== 1 ? "s" : ""}. Esta acción no se puede deshacer.`,
+    );
+    if (!ok) return;
+    const keys = Object.keys(localStorage).filter((k) =>
+      k.startsWith("pomodoro:sessions:"),
+    );
+    keys.forEach((k) => storage.delete(k));
+    statsController.renderAll();
+    showToast(`Se eliminaron ${history.length} sesiones.`);
   });
 }
 
@@ -131,6 +149,23 @@ function bindDemoData() {
   });
 }
 
+function showConfirmModal(message) {
+  return new Promise((resolve) => {
+    const overlay = document.querySelector("#confirmModal");
+    const msgEl = document.querySelector("#modalMessage");
+    msgEl.textContent = message;
+    overlay.hidden = false;
+
+    document.querySelector("#modalConfirmBtn").onclick = () => {
+      overlay.hidden = true;
+      resolve(true);
+    };
+    document.querySelector("#modalCancelBtn").onclick = () => {
+      overlay.hidden = true;
+      resolve(false);
+    };
+  });
+}
 function showToast(message) {
   const toast = document.querySelector("#toast");
   toast.textContent = message;
@@ -140,6 +175,7 @@ function showToast(message) {
 
 bindSettings();
 bindDemoData();
+bindClearHistory();
 taskController.render();
 statsController.renderAll();
 timerModel.totalSeconds = configModel.get().workDuration * 60;
